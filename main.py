@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,6 +20,52 @@ def read_root():
 @app.get("/api/hello")
 def hello():
     return {"message": "Hello from the backend API!"}
+
+@app.get("/api/markets")
+def market_snapshot():
+    """Simple market snapshot for demo purposes.
+    In a real setup, this would pull from a data provider and/or database.
+    """
+    now = datetime.now(timezone.utc).isoformat()
+    data = [
+        {
+            "symbol": "CL",
+            "name": "WTI Crude Oil",
+            "price": 78.42,
+            "change": -0.62,
+            "changePct": -0.78,
+            "currency": "USD/bbl",
+            "updatedAt": now,
+        },
+        {
+            "symbol": "XAU",
+            "name": "Gold",
+            "price": 2345.10,
+            "change": 12.3,
+            "changePct": 0.53,
+            "currency": "USD/oz",
+            "updatedAt": now,
+        },
+        {
+            "symbol": "HG",
+            "name": "Copper",
+            "price": 4.12,
+            "change": -0.03,
+            "changePct": -0.72,
+            "currency": "USD/lb",
+            "updatedAt": now,
+        },
+        {
+            "symbol": "ZW",
+            "name": "Wheat",
+            "price": 621.5,
+            "change": 4.75,
+            "changePct": 0.77,
+            "currency": "cents/bu",
+            "updatedAt": now,
+        },
+    ]
+    return {"data": data}
 
 @app.get("/test")
 def test_database():
